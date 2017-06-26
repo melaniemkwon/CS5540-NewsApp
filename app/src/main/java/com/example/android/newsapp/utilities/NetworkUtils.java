@@ -3,11 +3,19 @@ package com.example.android.newsapp.utilities;
 import android.net.Uri;
 import android.util.Log;
 
+import com.example.android.newsapp.model.NewsItem;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static android.content.ContentValues.TAG;
@@ -17,7 +25,9 @@ import static android.content.ContentValues.TAG;
  */
 
 public class NetworkUtils {
-    private static final String BASE_URL = "https://newsapi.org/v1/articles";
+    public static final String TAG = "NetworkUtils";
+
+    final static String BASE_URL = "https://newsapi.org/v1/articles";
 
     final static String SOURCE_PARAM = "source";
     final static String SORT_PARAM = "sortBy";
@@ -27,6 +37,7 @@ public class NetworkUtils {
     private final static String sort = "latest";
     private final static String key = "3ae7fb3352704278be78c7bf601ff042";
 
+    // TODO: update buildUrl() method to include news source as parameter
     public static URL buildUrl() {
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
                 .appendQueryParameter(SOURCE_PARAM, src)
@@ -70,5 +81,35 @@ public class NetworkUtils {
         } finally {
             urlConnection.disconnect();
         }
+    }
+
+    public static ArrayList<NewsItem> parseJSON(String json) throws JSONException {
+        ArrayList<NewsItem> result = new ArrayList<>();
+        JSONObject main = new JSONObject(json);
+        JSONArray items = main.getJSONArray("articles");
+
+        String source = main.getString("source");
+        String author;
+        String title;
+        String description;
+        String url;
+        String urlToImage;
+        String publishedAt;
+
+        for(int i = 0; i < items.length(); i++) {
+            JSONObject item = items.getJSONObject(i);
+
+            author = item.getString("author");
+            title = item.getString("title");
+            description = item.getString("description");
+            url = item.getString("url");
+            urlToImage = item.getString("urlToImage");
+            publishedAt = item.getString("publishedAt");
+
+            NewsItem newsItem = new NewsItem(source, author, title, description, url, urlToImage, publishedAt);
+            result.add(newsItem);
+        }
+
+        return result;
     }
 }
