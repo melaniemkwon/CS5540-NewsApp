@@ -38,9 +38,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
         boolean attachToParent = false;
 
         View view = inflater.inflate(layoutIdForListItem, viewGroup, attachToParent);
-        NewsAdapterViewHolder viewHolder = new NewsAdapterViewHolder(view);
 
-        return viewHolder;
+        return new NewsAdapterViewHolder(view);
     }
 
     @Override
@@ -77,5 +76,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             int pos = getAdapterPosition();
             listener.onItemClick(pos);
         }
+    }
+
+    public void setData(ArrayList<NewsItem> data) {
+        this.data = data;
     }
 }

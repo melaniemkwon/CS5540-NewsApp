@@ -27,7 +27,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     static final String TAG = "mainactivity";
 
-    //private TextView mNewsTextView;
     private RecyclerView mRecyclerView;
     private NewsAdapter mNewsAdapter;
     private EditText mSearchBoxEditText;
@@ -38,15 +37,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        mNewsTextView = (TextView) findViewById(R.id.news_data);
-//        mNewsAdapter = new NewsAdapter();
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_news);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
 
         mSearchBoxEditText = (EditText) findViewById(R.id.et_search_box);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
         loadNewsData();
+
     }
 
     private void loadNewsData() {
