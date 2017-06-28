@@ -27,7 +27,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
     }
 
     public interface ItemClickListener {
-        void onItemClick(int clickedItemIndex);
+        void onItemClick(String newsItemUrl);
     }
 
     @Override
@@ -62,6 +62,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             mNewsTitle = (TextView) itemView.findViewById(R.id.news_title);
             mNewsDescription = (TextView) itemView.findViewById(R.id.news_description);
             mNewsTime = (TextView) itemView.findViewById(R.id.news_time);
+
+            itemView.setOnClickListener(this);
         }
 
         public void bind(int pos) {
@@ -74,7 +76,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
         @Override
         public void onClick(View v) {
             int pos = getAdapterPosition();
-            listener.onItemClick(pos);
+            String url = data.get(pos).getUrl();
+            listener.onItemClick(url);
         }
     }
 

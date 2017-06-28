@@ -1,5 +1,6 @@
 package com.example.android.newsapp;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -109,9 +110,9 @@ public class MainActivity extends AppCompatActivity {
             if (newsData != null) {
                 NewsAdapter adapter = new NewsAdapter(newsData, new NewsAdapter.ItemClickListener() {
                     @Override
-                    public void onItemClick(int clickedItemIndex) {
-                        String url = newsData.get(clickedItemIndex).getUrl();
-                        Log.d(TAG, String.format("Url %s", url));
+                    public void onItemClick(String newsItemUrl) {
+
+                        Log.d(TAG, String.format("Url %s", newsItemUrl));
                     }
                 });
                 mRecyclerView.setAdapter(adapter);
