@@ -1,6 +1,8 @@
 package com.example.android.newsapp;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,9 +24,11 @@ import org.json.JSONException;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 
+// 8. Implement NewsAdapter.ItemClickListener from the MainActivity
 public class MainActivity extends AppCompatActivity {
     static final String TAG = "mainactivity";
 
@@ -48,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
         loadNewsData();
 
+        // 13. Pass in this as the ItemClickListener to the NewsAdapter constructor
+//        mNewsAdapter = new NewsAdapter()
+//        mRecyclerView.setAdapter(mNewsAdapter);
     }
 
     private void loadNewsData() {
@@ -64,17 +71,21 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemNumber = item.getItemId();
 
-        if (itemNumber == R.id.search) {
-            String s = mSearchBoxEditText.getText().toString();
-            FetchNewsTask task = new FetchNewsTask(s);
-            task.execute();
+        switch (itemNumber) {
+            case R.id.search:
+                String s = mSearchBoxEditText.getText().toString();
+                FetchNewsTask task = new FetchNewsTask(s);
+                task.execute();
+                return true;
+//            case R.id.
         }
 
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
-    class FetchNewsTask extends AsyncTask<URL, Void, ArrayList<NewsItem>> {
+    class FetchNewsTask extends AsyncTask<URL, Void, ArrayList<NewsItem>> implements NewsAdapter.ItemClickListener {
         String query;
+        ArrayList<NewsItem> data;
 
         FetchNewsTask(String s) {
             query = s;
@@ -104,18 +115,28 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final ArrayList<NewsItem> newsData) {
-            super.onPostExecute(newsData);
+            this.data = newsData;
+            super.onPostExecute(data);
             mLoadingIndicator.setVisibility(View.INVISIBLE);
 
-            if (newsData != null) {
-                NewsAdapter adapter = new NewsAdapter(newsData, new NewsAdapter.ItemClickListener() {
-                    @Override
-                    public void onItemClick(String newsItemUrl) {
-
-                        Log.d(TAG, String.format("Url %s", newsItemUrl));
-                    }
-                });
+            if (data != null) {
+                // 13. Pass in this as the ItemClickListener to the NewsAdapter constructor
+                NewsAdapter adapter = new NewsAdapter(data, this);
                 mRecyclerView.setAdapter(adapter);
+            }
+        }
+
+        // 10. Override ItemClickListener's onListItemClick method
+        @Override
+        public void onListItemClick(int clickedItemIndex) {
+            // 11. Open url link in browser
+            openWebPage(data.get(clickedItemIndex).getUrl());
+        }
+
+        public void openWebPage(String url) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
             }
         }
     }

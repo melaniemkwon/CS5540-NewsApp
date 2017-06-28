@@ -18,16 +18,23 @@ import java.util.ArrayList;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterViewHolder> {
 
+    private static final String TAG = NewsAdapter.class.getSimpleName();
+
     private ArrayList<NewsItem> data;
-    ItemClickListener listener;
+
+    // 3. Create final private ItemClickListener
+    final private ItemClickListener listener;
 
     public NewsAdapter(ArrayList<NewsItem> data, ItemClickListener listener) {
         this.data = data;
+        // 4. Add ListItemClickListener as parameter to constructor
         this.listener = listener;
     }
 
+    // 1. Add interface
     public interface ItemClickListener {
-        void onItemClick(String newsItemUrl);
+        // 2. define void method that takes an int parameter
+        void onListItemClick(int clickedItemIndex);
     }
 
     @Override
@@ -52,6 +59,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
         return data.size();
     }
 
+    // 5. Implement OnClickListener in NewsAdapterViewHolder class
     class NewsAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final TextView mNewsTitle;
         public final TextView mNewsDescription;
@@ -62,7 +70,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             mNewsTitle = (TextView) itemView.findViewById(R.id.news_title);
             mNewsDescription = (TextView) itemView.findViewById(R.id.news_description);
             mNewsTime = (TextView) itemView.findViewById(R.id.news_time);
-
+            // 7. Call setOnClickListener on the View passed into the constructor
             itemView.setOnClickListener(this);
         }
 
@@ -73,11 +81,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             mNewsTime.setText(newsItem.getPublishedAt());
         }
 
+        // 6. Override onClick, passing in clicked item's pos
         @Override
         public void onClick(View v) {
-            int pos = getAdapterPosition();
-            String url = data.get(pos).getUrl();
-            listener.onItemClick(url);
+            listener.onListItemClick(getAdapterPosition());
         }
     }
 
