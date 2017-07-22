@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,8 +31,8 @@ import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 
-// 8. Implement NewsAdapter.ItemClickListener from the MainActivity
-public class MainActivity extends AppCompatActivity {
+// HW3: 1. Implement LoaderManager.LoaderCallbacks<Void> on MainActivity
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Void>{
     static final String TAG = "mainactivity";
 
     private RecyclerView mRecyclerView;
@@ -51,10 +54,6 @@ public class MainActivity extends AppCompatActivity {
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
         loadNewsData();
-
-        // 13. Pass in this as the ItemClickListener to the NewsAdapter constructor
-//        mNewsAdapter = new NewsAdapter()
-//        mRecyclerView.setAdapter(mNewsAdapter);
     }
 
     private void loadNewsData() {
@@ -77,11 +76,50 @@ public class MainActivity extends AppCompatActivity {
                 FetchNewsTask task = new FetchNewsTask(s);
                 task.execute();
                 return true;
-//            case R.id.
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    // HW3: 2. Implement methods for LoaderManager.LoaderCallbacks<Void>
+    @Override
+    public Loader<Void> onCreateLoader(int id, Bundle args) {
+        // Return new AsyncTaskLoader<Void> as anonymous inner class with this as the constructor's parameter
+        return new AsyncTaskLoader<Void>(this) {
+
+            // Show loading indicator on the start of loading
+            @Override
+            protected void onStartLoading() {
+                super.onStartLoading();
+                mLoadingIndicator.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public Void loadInBackground() {
+                // TODO: Refresh articles method
+//                RefreshTasks.refreshArticles(MainActivity.this);
+                return null;
+            }
+        };
+    }
+
+    // HW3: 3. When loading is finished, hide the loading indicator
+    @Override
+    public void onLoadFinished(Loader<Void> loader, Void data) {
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+
+        // TODO: get info from db
+//        db = new DBHelper(MainActivity.this).getReadableDatabase();
+//        cursor = DatabaseUtils.getAll(db);
+
+        // TODO: Reset data in recyclerview
+//        adapter = new MyAdapter(cursor, this);
+//        rv.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Void> loader) {}
 
     class FetchNewsTask extends AsyncTask<URL, Void, ArrayList<NewsItem>> implements NewsAdapter.ItemClickListener {
         String query;
