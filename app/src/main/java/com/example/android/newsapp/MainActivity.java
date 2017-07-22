@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     static final String TAG = "mainactivity";
 
     private RecyclerView mRecyclerView;
-    private NewsAdapter mNewsAdapter;
     private EditText mSearchBoxEditText;
     private ProgressBar mLoadingIndicator;
 
@@ -158,16 +157,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             mLoadingIndicator.setVisibility(View.INVISIBLE);
 
             if (data != null) {
-                // 13. Pass in this as the ItemClickListener to the NewsAdapter constructor
                 NewsAdapter adapter = new NewsAdapter(data, this);
                 mRecyclerView.setAdapter(adapter);
             }
         }
 
-        // 10. Override ItemClickListener's onListItemClick method
         @Override
         public void onListItemClick(int clickedItemIndex) {
-            // 11. Open url link in browser
             openWebPage(data.get(clickedItemIndex).getUrl());
         }
 
