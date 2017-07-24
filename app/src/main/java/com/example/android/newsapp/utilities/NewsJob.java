@@ -60,7 +60,7 @@ public class NewsJob extends JobService {
         return true;
     }
 
-    private void refreshArticles(Context context) {
+    public static void refreshArticles(Context context) {
         ArrayList<NewsItem> result = null;
         URL url = NetworkUtils.buildUrl();
 

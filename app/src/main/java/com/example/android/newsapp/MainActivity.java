@@ -22,6 +22,7 @@ import com.example.android.newsapp.data.Contract;
 import com.example.android.newsapp.data.DBHelper;
 import com.example.android.newsapp.data.DBUtils;
 import com.example.android.newsapp.utilities.NewsAdapter;
+import com.example.android.newsapp.utilities.NewsJob;
 
 // HW3: 2. Implement LoaderManager.LoaderCallbacks<Void> on MainActivity
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Void>, NewsAdapter.ItemClickListener{
@@ -48,8 +49,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
-
-        mSearchBoxEditText = (EditText) findViewById(R.id.et_search_box);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
     }
 
@@ -101,21 +100,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             public Void loadInBackground() {
-                // TODO: Refresh articles method
-//                RefreshTasks.refreshArticles(MainActivity.this);
-//                ArrayList<NewsItem> result = null;
-//                URL newsRequestURL = NetworkUtils.buildUrl();
-
-//                try {
-//                    String json = NetworkUtils.getResponseFromHttpUrl(newsRequestURL);
-//                    result = NetworkUtils.parseJSON(json);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                return result;
-
+                // DONE: Refresh articles method
+                NewsJob.refreshArticles(MainActivity.this);
                 return null;
             }
         };
