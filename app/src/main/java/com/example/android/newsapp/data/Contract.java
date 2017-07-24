@@ -6,12 +6,12 @@ import android.provider.BaseColumns;
  * Created by melaniekwon on 7/23/17.
  */
 
-// HW3: 3. Create inner class Contract class that implements BaseColumns interface
+// HW4: 3. Create inner class Contract class that implements BaseColumns interface
 public class Contract {
 
     public static final class NewsItem implements BaseColumns {
 
-        // HW3: 3. Create a static final members for the table name and each of the db columns
+        // HW4: 3. Create a static final members for the table name and each of the db columns
         public static final String TABLE_NAME = "news_items";
 
         public static final String COLUMN_SOURCE = "source";

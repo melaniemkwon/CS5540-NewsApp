@@ -15,7 +15,7 @@ import com.firebase.jobdispatcher.Trigger;
  * Created by melaniekwon on 7/24/17.
  */
 
-// HW3: 5. Load new info every minute
+// HW4: 5. Load new info every minute
 public class ScheduleUtils {
     private static final int SCHEDULE_INTERVAL_MINUTES = 60;
     private static final int SYNC_FLEXTIME_SECONDS = 0;

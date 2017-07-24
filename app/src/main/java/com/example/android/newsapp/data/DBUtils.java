@@ -12,6 +12,7 @@ import static com.example.android.newsapp.data.Contract.NewsItem.*;
  * Created by melaniekwon on 7/24/17.
  */
 
+// HW4: 3. Utility class to access, insert, and delete from db.
 public class DBUtils {
     // Get all news articles from database
     public static Cursor getAll(SQLiteDatabase db) {

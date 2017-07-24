@@ -9,7 +9,7 @@ import android.util.Log;
  * Created by melaniekwon on 7/23/17.
  */
 
-// HW3: 3. Create DBHelper that extends SQLiteOpenHelper class
+// HW4: 3. Create DBHelper that extends SQLiteOpenHelper class
 public class DBHelper extends SQLiteOpenHelper {
 
     // Create a static final String called DATABASE_NAME and set it to "newsitems.db"
