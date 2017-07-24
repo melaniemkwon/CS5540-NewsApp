@@ -1,6 +1,7 @@
 package com.example.android.newsapp.utilities;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.newsapp.R;
+import com.example.android.newsapp.data.Contract;
 import com.example.android.newsapp.data.NewsItem;
 
 import java.util.ArrayList;
@@ -20,21 +22,20 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
 
     private static final String TAG = NewsAdapter.class.getSimpleName();
 
-    private ArrayList<NewsItem> data;
-
-    // 3. Create final private ItemClickListener
     final private ItemClickListener listener;
 
-    public NewsAdapter(ArrayList<NewsItem> data, ItemClickListener listener) {
-        this.data = data;
-        // 4. Add ListItemClickListener as parameter to constructor
+    // HW3: 4. Add Cursor
+    private Cursor mCursor;
+
+    // HW3: 4. Modify constructor to accept cursor. Remove ArrayList<NewsItem> data.
+    public NewsAdapter(Cursor cursor, ItemClickListener listener) {
+        this.mCursor = cursor;
         this.listener = listener;
     }
 
-    // 1. Add interface
+    // HW3: 4. Modify ItemClickListener to accept Cursor
     public interface ItemClickListener {
-        // 2. define void method that takes an int parameter
-        void onListItemClick(int clickedItemIndex);
+        void onListItemClick(Cursor cursor, int clickedItemIndex);
     }
 
     @Override
@@ -54,12 +55,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
         holder.bind(position);
     }
 
+    // HW3: 4. Update the getItemCount to return the getCount of mCursor
     @Override
     public int getItemCount() {
-        return data.size();
+        return mCursor.getCount();
     }
 
-    // 5. Implement OnClickListener in NewsAdapterViewHolder class
     class NewsAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final TextView mNewsTitle;
         public final TextView mNewsDescription;
@@ -70,25 +71,23 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             mNewsTitle = (TextView) itemView.findViewById(R.id.news_title);
             mNewsDescription = (TextView) itemView.findViewById(R.id.news_description);
             mNewsTime = (TextView) itemView.findViewById(R.id.news_time);
-            // 7. Call setOnClickListener on the View passed into the constructor
             itemView.setOnClickListener(this);
         }
 
+        // HW3: 4.
         public void bind(int pos) {
-            NewsItem newsItem = data.get(pos);
-            mNewsTitle.setText(newsItem.getTitle());
-            mNewsDescription.setText(newsItem.getDescription());
-            mNewsTime.setText(newsItem.getPublishedAt());
+            mCursor.moveToPosition(pos);
+
+            mNewsTitle.setText(mCursor.getString(mCursor.getColumnIndex(Contract.NewsItem.COLUMN_TITLE)));
+            mNewsDescription.setText(mCursor.getString(mCursor.getColumnIndex(Contract.NewsItem.COLUMN_DESCRIPTION)));
+            mNewsTime.setText(mCursor.getString(mCursor.getColumnIndex(Contract.NewsItem.COLUMN_PUBLISHED_AT)));
+            // TODO: IMAGE
         }
 
-        // 6. Override onClick, passing in clicked item's pos
+        // HW3: 4. Add cursor to click listener call
         @Override
         public void onClick(View v) {
-            listener.onListItemClick(getAdapterPosition());
+            listener.onListItemClick(mCursor, getAdapterPosition());
         }
-    }
-
-    public void setData(ArrayList<NewsItem> data) {
-        this.data = data;
     }
 }

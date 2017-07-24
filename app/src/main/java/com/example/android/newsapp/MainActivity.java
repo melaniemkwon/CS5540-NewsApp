@@ -1,6 +1,7 @@
 package com.example.android.newsapp;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.example.android.newsapp.data.DBHelper;
 import com.example.android.newsapp.utilities.NewsAdapter;
 
 // HW3: 2. Implement LoaderManager.LoaderCallbacks<Void> on MainActivity
@@ -24,6 +26,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private RecyclerView mRecyclerView;
     private EditText mSearchBoxEditText;
     private ProgressBar mLoadingIndicator;
+
+    // HW3: 4. Create local field member of type SQLiteDatabase
+    private SQLiteDatabase mDb;
 
     // HW3: 2. Create constant int to uniquely identify loader
     private static final int NEWS_LOADER = 1;
@@ -42,6 +47,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
         loadNewsData();
+    }
+
+    // HW3: 4.
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // HW3: 4. Get a writable database reference and store in mDb
+        mDb = new DBHelper(MainActivity.this).getReadableDatabase();
+
     }
 
     private void loadNewsData() {
