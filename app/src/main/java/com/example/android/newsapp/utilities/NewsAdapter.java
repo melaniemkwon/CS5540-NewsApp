@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.newsapp.R;
-import com.example.android.newsapp.model.NewsItem;
+import com.example.android.newsapp.data.NewsItem;
 
 import java.util.ArrayList;
 

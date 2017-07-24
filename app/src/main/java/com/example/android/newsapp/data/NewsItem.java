@@ -1,4 +1,4 @@
-package com.example.android.newsapp.model;
+package com.example.android.newsapp.data;
 
 /**
  * Created by melaniekwon on 6/24/17.
