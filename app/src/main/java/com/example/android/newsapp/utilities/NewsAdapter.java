@@ -70,7 +70,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
         public final TextView mNewsDescription;
         public final TextView mNewsTime;
 
-        // HW3: 8. Add image
+        // HW3: 8. Add image to recyclerview
         public final ImageView img;
 
         public NewsAdapterViewHolder(View itemView) {
@@ -82,7 +82,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             itemView.setOnClickListener(this);
         }
 
-        // HW3: 4.
         public void bind(int pos) {
             mCursor.moveToPosition(pos);
 
@@ -90,7 +89,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             mNewsDescription.setText(mCursor.getString(mCursor.getColumnIndex(Contract.NewsItem.COLUMN_DESCRIPTION)));
             mNewsTime.setText(mCursor.getString(mCursor.getColumnIndex(Contract.NewsItem.COLUMN_PUBLISHED_AT)));
 
-            // TODO: IMAGE
+            // HW3: 8. Use Picasso to load a thumbnail for each news item in recycler view
             String urlToImage = mCursor.getString(mCursor.getColumnIndex(Contract.NewsItem.COLUMN_URL_TO_IMAGE));
             Log.d(TAG, urlToImage);
             if(urlToImage != null){

@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         ScheduleUtils.scheduleRefresh(this);
     }
 
-    // HW3: 4.
     @Override
     protected void onStart() {
         super.onStart();
