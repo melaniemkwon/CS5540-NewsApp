@@ -28,16 +28,16 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
     final private ItemClickListener listener;
     private Context context;
 
-    // HW3: 4. Add Cursor
+    // HW4: 4. Add Cursor
     private Cursor mCursor;
 
-    // HW3: 4. Modify constructor to accept cursor. Remove ArrayList<NewsItem> data.
+    // HW4: 4. Modify constructor to accept cursor. Remove ArrayList<NewsItem> data.
     public NewsAdapter(Cursor cursor, ItemClickListener listener) {
         this.mCursor = cursor;
         this.listener = listener;
     }
 
-    // HW3: 4. Modify ItemClickListener to accept Cursor
+    // HW4: 4. Modify ItemClickListener to accept Cursor
     public interface ItemClickListener {
         void onListItemClick(Cursor cursor, int clickedItemIndex);
     }
@@ -59,7 +59,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
         holder.bind(position);
     }
 
-    // HW3: 4. Update the getItemCount to return the getCount of mCursor
+    // HW4: 4. Update the getItemCount to return the getCount of mCursor
     @Override
     public int getItemCount() {
         return mCursor.getCount();
@@ -70,7 +70,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
         public final TextView mNewsDescription;
         public final TextView mNewsTime;
 
-        // HW3: 8. Add image to recyclerview
+        // HW4: 8. Add image to recyclerview
         public final ImageView img;
 
         public NewsAdapterViewHolder(View itemView) {
@@ -89,7 +89,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             mNewsDescription.setText(mCursor.getString(mCursor.getColumnIndex(Contract.NewsItem.COLUMN_DESCRIPTION)));
             mNewsTime.setText(mCursor.getString(mCursor.getColumnIndex(Contract.NewsItem.COLUMN_PUBLISHED_AT)));
 
-            // HW3: 8. Use Picasso to load a thumbnail for each news item in recycler view
+            // HW4: 8. Use Picasso to load a thumbnail for each news item in recycler view
             String urlToImage = mCursor.getString(mCursor.getColumnIndex(Contract.NewsItem.COLUMN_URL_TO_IMAGE));
             Log.d(TAG, urlToImage);
             if(urlToImage != null){
@@ -99,7 +99,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             }
         }
 
-        // HW3: 4. Add cursor to click listener call
+        // HW4: 4. Add cursor to click listener call
         @Override
         public void onClick(View v) {
             listener.onListItemClick(mCursor, getAdapterPosition());

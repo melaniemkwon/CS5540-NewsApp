@@ -27,7 +27,7 @@ import com.example.android.newsapp.utilities.NewsAdapter;
 import com.example.android.newsapp.utilities.NewsJob;
 import com.example.android.newsapp.utilities.ScheduleUtils;
 
-// HW3: 2. Implement LoaderManager.LoaderCallbacks<Void> on MainActivity
+// HW4: 2. Implement LoaderManager.LoaderCallbacks<Void> on MainActivity
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Void>, NewsAdapter.ItemClickListener{
     static final String TAG = "mainactivity";
 
@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private EditText mSearchBoxEditText;
     private ProgressBar mLoadingIndicator;
 
-    // HW3: 4. Create local field member of type SQLiteDatabase and Cursor object
+    // HW4: 4. Create local field member of type SQLiteDatabase and Cursor object
     private SQLiteDatabase mDb;
     private Cursor cursor;
 
-    // HW3: 2. Create constant int to uniquely identify loader
+    // HW4: 2. Create constant int to uniquely identify loader
     private static final int NEWS_LOADER = 1;
 
     @Override
@@ -48,14 +48,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // HW3: 7. Have activity laod what's currently in database into recyclerview for display.
+        // HW4: 7. Have activity laod what's currently in database into recyclerview for display.
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_news);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
-        // HW3: 6. Check if app has been installed before. If not, load data into db.
+        // HW4: 6. Check if app has been installed before. If not, load data into db.
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isFirst = prefs.getBoolean("isfirst", true);
 
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onStart() {
         super.onStart();
-        // HW3: 4. Get a writable database reference and store in mDb
+        // HW4: 4. Get a writable database reference and store in mDb
         mDb = new DBHelper(MainActivity.this).getReadableDatabase();
         cursor = DBUtils.getAll(mDb);
         mNewsAdapter = new NewsAdapter(cursor, this);
@@ -99,15 +99,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return super.onOptionsItemSelected(item);
     }
 
-    // HW3: 2. Implement methods onCreateLoader, onLoadFinished, and onLoaderReset
+    // HW4: 2. Implement methods onCreateLoader, onLoadFinished, and onLoaderReset
     //         for LoaderManager.LoaderCallbacks<Void>
     @Override
     public Loader<Void> onCreateLoader(int id, Bundle args) {
 
-        // HW3: 2. Return new AsyncTaskLoader<Void> as anonymous inner class with this as constructor's parameter
+        // HW4: 2. Return new AsyncTaskLoader<Void> as anonymous inner class with this as constructor's parameter
         return new AsyncTaskLoader<Void>(this) {
 
-            // HW3: 2. Show loading indicator on the start of loading
+            // HW4: 2. Show loading indicator on the start of loading
             @Override
             protected void onStartLoading() {
                 super.onStartLoading();
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             public Void loadInBackground() {
-                // HW3: 7. Refresh articles method
+                // HW4: 7. Refresh articles method
                 NewsJob.refreshArticles(MainActivity.this);
                 return null;
             }
@@ -125,14 +125,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Void> loader, Void data) {
-        // HW3: 2. When loading is finished, hide the loading indicator
+        // HW4: 2. When loading is finished, hide the loading indicator
         mLoadingIndicator.setVisibility(View.INVISIBLE);
 
-        // HW3: 7. get info from db
+        // HW4: 7. get info from db
         mDb = new DBHelper(MainActivity.this).getReadableDatabase();
         cursor = DBUtils.getAll(mDb);
 
-        // HW3: 7. Reset data in recyclerview
+        // HW4: 7. Reset data in recyclerview
         mNewsAdapter = new NewsAdapter(cursor, this);
         mRecyclerView.setAdapter(mNewsAdapter);
         mNewsAdapter.notifyDataSetChanged();
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<Void> loader) {}
 
-    // HW3: 4. Update onListItemClick to include Cursor
+    // HW4: 4. Update onListItemClick to include Cursor
     @Override
     public void onListItemClick(Cursor cursor, int clickedItemIndex) {
         cursor.moveToPosition(clickedItemIndex);
@@ -154,5 +154,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-    // HW3: 2. Remove class FetchNewsTask with the AsyncTask
+    // HW4: 2. Remove class FetchNewsTask with the AsyncTask
 }
