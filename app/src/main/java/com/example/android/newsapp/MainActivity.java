@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 
 import com.example.android.newsapp.data.Contract;
 import com.example.android.newsapp.data.DBHelper;
+import com.example.android.newsapp.data.DBUtils;
 import com.example.android.newsapp.utilities.NewsAdapter;
 
 // HW3: 2. Implement LoaderManager.LoaderCallbacks<Void> on MainActivity
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onStart();
         // HW3: 4. Get a writable database reference and store in mDb
         mDb = new DBHelper(MainActivity.this).getReadableDatabase();
-//        cursor = DatabaseUtils.getAll(mDb);
+        cursor = DBUtils.getAll(mDb);
 //        adapter = new MyAdapter(cursor, this);
 //        rv.setAdapter(adapter);
     }
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // TODO: get info from db
         mDb = new DBHelper(MainActivity.this).getReadableDatabase();
-        cursor = DatabaseUtils.getAll(db);
+        cursor = DBUtils.getAll(mDb);
 
         // TODO: Reset data in recyclerview
 //        adapter = new MyAdapter(cursor, this);
