@@ -1,9 +1,11 @@
 package com.example.android.newsapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -23,6 +25,7 @@ import com.example.android.newsapp.data.DBHelper;
 import com.example.android.newsapp.data.DBUtils;
 import com.example.android.newsapp.utilities.NewsAdapter;
 import com.example.android.newsapp.utilities.NewsJob;
+import com.example.android.newsapp.utilities.ScheduleUtils;
 
 // HW3: 2. Implement LoaderManager.LoaderCallbacks<Void> on MainActivity
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Void>, NewsAdapter.ItemClickListener{
@@ -50,6 +53,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isFirst = prefs.getBoolean("isfirst", true);
+
+        if (isFirst) {
+            LoaderManager loaderManager = getSupportLoaderManager();
+            loaderManager.restartLoader(NEWS_LOADER, null, this).forceLoad();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("isfirst", false);
+            editor.commit();
+        }
+        ScheduleUtils.scheduleRefresh(this);
     }
 
     // HW3: 4.
