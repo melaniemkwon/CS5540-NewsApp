@@ -30,7 +30,7 @@ public class NetworkUtils {
     final static String SORT_PARAM = "sortBy";
     final static String APIKEY_PARAM = "apiKey";
 
-    private final static String src = "the-next-web";
+    private final static String src = "reuters";
     private final static String sort = "latest";
     private final static String key = "3ae7fb3352704278be78c7bf601ff042";
 
