@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     static final String TAG = "mainactivity";
 
     private RecyclerView mRecyclerView;
+    private NewsAdapter mNewsAdapter;
     private EditText mSearchBoxEditText;
     private ProgressBar mLoadingIndicator;
 
@@ -50,8 +51,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mSearchBoxEditText = (EditText) findViewById(R.id.et_search_box);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
-
-        loadNewsData();
     }
 
     // HW3: 4.
@@ -61,12 +60,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // HW3: 4. Get a writable database reference and store in mDb
         mDb = new DBHelper(MainActivity.this).getReadableDatabase();
         cursor = DBUtils.getAll(mDb);
-//        adapter = new MyAdapter(cursor, this);
-//        rv.setAdapter(adapter);
-    }
-
-    private void loadNewsData() {
-        new FetchNewsTask("").execute();
+        mNewsAdapter = new NewsAdapter(cursor, this);
+        mRecyclerView.setAdapter(mNewsAdapter);
     }
 
     @Override
@@ -81,10 +76,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         switch (itemNumber) {
             case R.id.search:
-                // TODO: remove search box?
-                String s = mSearchBoxEditText.getText().toString();
-                FetchNewsTask task = new FetchNewsTask(s);
-                task.execute();
+                LoaderManager loaderManager = getSupportLoaderManager();
+                loaderManager.restartLoader(NEWS_LOADER, null, this).forceLoad();
                 return true;
         }
 
@@ -110,10 +103,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public Void loadInBackground() {
                 // TODO: Refresh articles method
 //                RefreshTasks.refreshArticles(MainActivity.this);
-
 //                ArrayList<NewsItem> result = null;
 //                URL newsRequestURL = NetworkUtils.buildUrl();
-//
+
 //                try {
 //                    String json = NetworkUtils.getResponseFromHttpUrl(newsRequestURL);
 //                    result = NetworkUtils.parseJSON(json);
@@ -134,14 +126,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // HW3: 2. When loading is finished, hide the loading indicator
         mLoadingIndicator.setVisibility(View.INVISIBLE);
 
-        // TODO: get info from db
+        // DONE: get info from db
         mDb = new DBHelper(MainActivity.this).getReadableDatabase();
         cursor = DBUtils.getAll(mDb);
 
-        // TODO: Reset data in recyclerview
-//        adapter = new MyAdapter(cursor, this);
-//        rv.setAdapter(adapter);
-//        adapter.notifyDataSetChanged();
+        // DONE: Reset data in recyclerview
+        mNewsAdapter = new NewsAdapter(cursor, this);
+        mRecyclerView.setAdapter(mNewsAdapter);
+        mNewsAdapter.notifyDataSetChanged();
     }
 
     @Override
