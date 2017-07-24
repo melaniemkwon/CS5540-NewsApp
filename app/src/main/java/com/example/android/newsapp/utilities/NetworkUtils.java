@@ -3,7 +3,7 @@ package com.example.android.newsapp.utilities;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.android.newsapp.model.NewsItem;
+import com.example.android.newsapp.data.NewsItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,14 +11,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by melaniekwon on 6/15/17.
@@ -33,7 +30,7 @@ public class NetworkUtils {
     final static String SORT_PARAM = "sortBy";
     final static String APIKEY_PARAM = "apiKey";
 
-    private final static String src = "the-next-web";
+    private final static String src = "reuters";
     private final static String sort = "latest";
     private final static String key = "3ae7fb3352704278be78c7bf601ff042";
 
