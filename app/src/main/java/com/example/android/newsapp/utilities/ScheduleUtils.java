@@ -15,9 +15,10 @@ import com.firebase.jobdispatcher.Trigger;
  * Created by melaniekwon on 7/24/17.
  */
 
+// HW3: 5. Load new info every minute
 public class ScheduleUtils {
-    private static final int SCHEDULE_INTERVAL_MINUTES = 360;
-    private static final int SYNC_FLEXTIME_SECONDS = 60;
+    private static final int SCHEDULE_INTERVAL_MINUTES = 60;
+    private static final int SYNC_FLEXTIME_SECONDS = 0;
     private static final String NEWS_JOB_TAG = "news_job_tag";
 
     private static boolean sInitialized;
@@ -41,6 +42,5 @@ public class ScheduleUtils {
 
         dispatcher.schedule(constraintRefreshJob);
         sInitialized = true;
-
     }
 }

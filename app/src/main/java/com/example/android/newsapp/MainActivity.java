@@ -48,12 +48,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // HW3: 7. Have activity laod what's currently in database into recyclerview for display.
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_news);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
+        // HW3: 6. Check if app has been installed before. If not, load data into db.
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isFirst = prefs.getBoolean("isfirst", true);
 
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             public Void loadInBackground() {
-                // DONE: Refresh articles method
+                // HW3: 7. Refresh articles method
                 NewsJob.refreshArticles(MainActivity.this);
                 return null;
             }
@@ -127,11 +129,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // HW3: 2. When loading is finished, hide the loading indicator
         mLoadingIndicator.setVisibility(View.INVISIBLE);
 
-        // DONE: get info from db
+        // HW3: 7. get info from db
         mDb = new DBHelper(MainActivity.this).getReadableDatabase();
         cursor = DBUtils.getAll(mDb);
 
-        // DONE: Reset data in recyclerview
+        // HW3: 7. Reset data in recyclerview
         mNewsAdapter = new NewsAdapter(cursor, this);
         mRecyclerView.setAdapter(mNewsAdapter);
         mNewsAdapter.notifyDataSetChanged();
@@ -154,58 +156,4 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     // HW3: 2. Remove class FetchNewsTask with the AsyncTask
-//    class FetchNewsTask extends AsyncTask<URL, Void, ArrayList<NewsItem>> implements NewsAdapter.ItemClickListener {
-//        String query;
-//        ArrayList<NewsItem> data;
-//
-//        FetchNewsTask(String s) {
-//            query = s;
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//            mLoadingIndicator.setVisibility(View.VISIBLE);
-//        }
-//
-//        @Override
-//        protected ArrayList<NewsItem> doInBackground(URL... params) {
-//            ArrayList<NewsItem> result = null;
-//            URL newsRequestURL = NetworkUtils.buildUrl();
-//
-//            try {
-//                String json = NetworkUtils.getResponseFromHttpUrl(newsRequestURL);
-//                result = NetworkUtils.parseJSON(json);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            return result;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(final ArrayList<NewsItem> newsData) {
-//            this.data = newsData;
-//            super.onPostExecute(data);
-//            mLoadingIndicator.setVisibility(View.INVISIBLE);
-//
-//            if (data != null) {
-//                NewsAdapter adapter = new NewsAdapter(data, this);
-//                mRecyclerView.setAdapter(adapter);
-//            }
-//        }
-//
-//        @Override
-//        public void onListItemClick(int clickedItemIndex) {
-//            openWebPage(data.get(clickedItemIndex).getUrl());
-//        }
-//
-//        public void openWebPage(String url) {
-//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//            if (intent.resolveActivity(getPackageManager()) != null) {
-//                startActivity(intent);
-//            }
-//        }
-//    }
 }
