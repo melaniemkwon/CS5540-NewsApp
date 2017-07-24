@@ -1,6 +1,7 @@
 package com.example.android.newsapp;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager;
@@ -10,12 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.example.android.newsapp.data.Contract;
 import com.example.android.newsapp.data.DBHelper;
 import com.example.android.newsapp.utilities.NewsAdapter;
 
@@ -27,8 +30,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private EditText mSearchBoxEditText;
     private ProgressBar mLoadingIndicator;
 
-    // HW3: 4. Create local field member of type SQLiteDatabase
+    // HW3: 4. Create local field member of type SQLiteDatabase and Cursor object
     private SQLiteDatabase mDb;
+    private Cursor cursor;
 
     // HW3: 2. Create constant int to uniquely identify loader
     private static final int NEWS_LOADER = 1;
@@ -55,7 +59,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onStart();
         // HW3: 4. Get a writable database reference and store in mDb
         mDb = new DBHelper(MainActivity.this).getReadableDatabase();
-
+//        cursor = DatabaseUtils.getAll(mDb);
+//        adapter = new MyAdapter(cursor, this);
+//        rv.setAdapter(adapter);
     }
 
     private void loadNewsData() {
@@ -128,8 +134,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mLoadingIndicator.setVisibility(View.INVISIBLE);
 
         // TODO: get info from db
-//        db = new DBHelper(MainActivity.this).getReadableDatabase();
-//        cursor = DatabaseUtils.getAll(db);
+        mDb = new DBHelper(MainActivity.this).getReadableDatabase();
+        cursor = DatabaseUtils.getAll(db);
 
         // TODO: Reset data in recyclerview
 //        adapter = new MyAdapter(cursor, this);
@@ -140,13 +146,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<Void> loader) {}
 
+    // HW3: 4. Update onListItemClick to include Cursor
     @Override
-    public void onListItemClick(int clickedItemIndex) {
-//        ArrayList<NewsItem> data;
-//        openWebPage(data.get(clickedItemIndex).getUrl());
-    }
+    public void onListItemClick(Cursor cursor, int clickedItemIndex) {
+        cursor.moveToPosition(clickedItemIndex);
+        String url = cursor.getString(cursor.getColumnIndex(Contract.NewsItem.COLUMN_URL));
+        Log.d(TAG, String.format("Url %s", url));
 
-    public void openWebPage(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
